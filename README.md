@@ -37,6 +37,51 @@ Applies on rear panel view
 ## LCD segments bit encoding
 ![image_1](https://raw.githubusercontent.com/lxxxxl/mmd-684u/master/images/led-segments.png?raw=true)  
 
+## Buttons
+`KEY1` pin emits signals from 11 buttons.  
+`KEY2` pin emits signals from 7 buttons.  
+Pins should be pulled up to 5V.  
+To remove noise from DAC output we can use bit shift:
+
+```C++
+
+pinMode(KEY_PIN1, INPUT_PULLUP); // 10 buttons
+pinMode(KEY_PIN2, INPUT_PULLUP); // 7 buttons
+
+// ...
+
+int button = analogRead(KEY_PIN1);
+if (button < 1000){    // signals>1000 are garbage because because PIN pulled to 5V
+  Serial.println(button >> 4);
+}
+button = analogRead(KEY_PIN2);
+if (button < 1000){    // signals>1000 are garbage because because PIN pulled to 5V
+  Serial.println(button >> 4);
+}
+```
+Here are button ids received after bit shift.  
+
+### KEY1
+* Play/Pause - 0
+* INT - 1
+* RPT - 2
+* RDM - 3
+* STOP - 4
+* OSD - 5
+* Band - 7
+* Seek up - 10
+* Seek down - 12
+* Encoder - 16
+* AMS - 30
+
+### KEY2
+* Mute - 1
+* LOC - 2
+* DISP - 4
+* Power - 5-6
+* MOD - 7
+* EQ - 10
+* ST - 14
 
 # LCD Test
 Arduino sketch that turns on single segment on LCD at a time.  
