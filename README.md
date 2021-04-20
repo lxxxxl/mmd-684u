@@ -83,6 +83,50 @@ Here are button ids received after bit shift.
 * EQ - 10
 * ST - 14
 
+## Digital encoder
+[Digital encoder](https://en.wikipedia.org/wiki/Encoder_(digital)) pins `EN+` and `EN-` should be pulled up to 5V.  
+Encoder can be polled via interrupts this way:
+```C++
+void setup() {
+  // attach interrupts for encoder poll
+  attachPCINT(ENCODER_A);
+  attachPCINT(ENCODER_B);
+  pinMode(ENCODER_A, INPUT_PULLUP);
+  pinMode(ENCODER_B, INPUT_PULLUP);
+}
+
+// attach PCINT for ATmega328 (UNO, Nano, Pro Mini)
+// https://alexgyver.ru/encoder/
+uint8_t attachPCINT(uint8_t pin) {
+  if (pin < 8) { // D0-D7 // PCINT2
+    PCICR |= (1 << PCIE2);
+    PCMSK2 |= (1 << pin); return 2; } else if (pin > 13) { //A0-A5  // PCINT1
+    PCICR |= (1 << PCIE1);
+    PCMSK1 |= (1 << pin - 14);
+    return 1;
+  }
+  else { // D8-D13  // PCINT0
+    PCICR |= (1 << PCIE0);
+    PCMSK0 |= (1 << pin - 8);
+    return 0;
+  }
+}
+
+// PCINT vectors
+// pins 0-7: PCINT2
+// pins 8-13: PCINT0
+// pins A0-A5: PCINT1
+ISR(PCINT0_vect) {
+  pollEncoder();
+}
+ISR(PCINT1_vect) {
+}
+ISR(PCINT2_vect) {
+  pollEncoder();
+}
+```
+Full source code can be found in [LED-test/LED-test.ino](LED-test/LED-test.ino)
+
 # LCD Test
 Arduino sketch that turns on single segment on LCD at a time.  
 To go to next/previous segment one should rotate encoder on panel.  
