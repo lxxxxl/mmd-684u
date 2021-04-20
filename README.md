@@ -37,6 +37,12 @@ Applies on rear panel view
 ## LCD segments bit encoding
 ![image_1](https://raw.githubusercontent.com/lxxxxl/mmd-684u/master/images/led-segments.png?raw=true)  
 
+## LCD connection
+LCD panel controlled via SPI interface.  
+`DATA` pin should be connected to Arduino `PIN D11 (MOSI)`  
+`CLK` pin should be connected to Arduino `PIN D13 (SCK)`  
+`CE` pin should be connected to Arduino `PIN D10` 
+
 ## Buttons
 `KEY1` pin emits signals from 11 buttons.  
 `KEY2` pin emits signals from 7 buttons.  
@@ -126,6 +132,30 @@ ISR(PCINT2_vect) {
 }
 ```
 Full source code can be found in [LED-test/LED-test.ino](LED-test/LED-test.ino)
+
+## IR receiver
+`IR` pin should be connected to any `PWM` Arduino pin.  
+To decode IR data [IRremote Arduino Library](https://github.com/Arduino-IRremote/Arduino-IRremote/) can be used.
+
+```C++
+#include <IRremote.h>
+
+#define IR_SENSOR 6
+
+void setup() {
+  pinMode(IR_SENSOR, INPUT);  
+  IrReceiver.begin(IR_SENSOR);
+  Serial.begin(9600);
+}
+
+void loop() {
+  if (IrReceiver.decode()) {
+    IrReceiver.printIRResultMinimal(&Serial);
+    IrReceiver.resume();
+  }
+  delay(100);
+}
+```
 
 # LCD Test
 Arduino sketch that turns on single segment on LCD at a time.  
