@@ -22,8 +22,8 @@ Experiments with Mystery MMD-684U front panel
 15. CLK		- LC75823 CL
 16. DATA	- LC75823 DI
 17. GND
-18. +		- USB D+
-19. -		- USB D-
+18. \+		- USB D+
+19. \-		- USB D-
 20. USB5V	- USB power
 
 
