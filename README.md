@@ -181,6 +181,8 @@ You can adjust encoder and chip select pins by editing this section of sketch.
 # LC75823 Font Creator
 This app can be used to create bitmasks for desired symbols according to `LCD segments bit encoding`.  
 
+# Controller
+Arduino sketch that implements all described interfaces.
 
 # Useful links
 https://pdf1.alldatasheet.com/datasheet-pdf/download/40944/SANYO/LC75823E.html
